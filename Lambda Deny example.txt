@@ -1,0 +1,25 @@
+#Lambda deny example    
+
+import boto3
+import json
+iam = boto3.client('iam')
+def lambda_handler(event, context):
+
+
+    group_policy = iam.GroupPolicy('s3testgroup', 'policy_deny')
+
+policy_deny = { 
+    'Version': '2012-10-17',
+    'Statement': [
+      {
+        'Action': ['s3:*'],
+        'Effect': 'Deny',
+        'Resource': '*'
+        }
+    ]   
+}
+
+iam.put_group_policy(
+    GroupName='s3testgroup',
+    PolicyName='s3testgroup_inline_policy',
+    PolicyDocument=json.dumps(policy_deny, indent=2))
